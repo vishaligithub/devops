@@ -31,6 +31,7 @@ pipeline {
           post {
               success {
                   archiveArtifacts 'target/*.jar'
+                  java -jar 'target/*.jar'
               }
 
           }
