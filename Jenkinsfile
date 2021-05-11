@@ -26,12 +26,12 @@ pipeline {
           steps {
              
             sh "mvn -Dmaven.test.failure.ignore=true clean install"
-            
+            sh "java -jar target/*.jar"
           }
           post {
               success {
                   archiveArtifacts 'target/*.jar'
-                  java -jar target/*.jar
+                
               }
 
           }
