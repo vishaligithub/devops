@@ -7,11 +7,19 @@ node{
    }
 
    stages {
+      stage('Build') {
+         steps {
+            // Get some code from a GitHub repository 
+           
+            sh "mvn -Dmaven.test.failure.ignore=true clean compile"
+            sh "mvn -Dmaven.test.failure.ignore=true clean install"
+         }
+      }
      
       stage('Deploy to Tomcat'){
       
          sshagent(['ssh_ec2']) {
-         sh 'scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/pipeline/target/*.war ubuntu@3.15.212.160:/opt'
+         sh 'scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/2nd pipeline with ssh/target/*.war ubuntu@3.15.212.160:/opt'
         }
         
       }
