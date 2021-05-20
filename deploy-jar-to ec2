@@ -1,28 +1,25 @@
-node{
+pipeline {
    agent any
 
    tools {
-      // Install the Maven version configured as "M3" and add it to the path.
       maven 'maven'
    }
 
    stages {
       stage('Build') {
-         steps {
-            // Get some code from a GitHub repository 
-           
+         steps {           
             sh "mvn -Dmaven.test.failure.ignore=true clean compile"
-            sh "mvn -Dmaven.test.failure.ignore=true clean install"
          }
       }
-     
-      stage('Deploy to Tomcat'){
-      
-         sshagent(['ssh_ec2']) {
-         sh 'scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/2nd pipeline with ssh/target/*.war ubuntu@3.15.212.160:/opt'
-        }
-        
+      stage("Deploy") {
+          steps {
+            sh "mvn -Dmaven.test.failure.ignore=true clean install"
+            sshagent(['ssh_ec2']) {
+               sh 'scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/2nd pipeline with ssh/target/*.war ubuntu@3.15.212.160:/opt'
+            }
+          }
       }
-    }
-  
+   }
 }
+
+
